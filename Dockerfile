@@ -14,10 +14,20 @@ RUN 		apt-get install -y git && \
 			git clone http://github.com/opower/sensu-metrics-relay.git && \
 			cp -R sensu-metrics-relay/lib/sensu/extensions/* /etc/sensu/extensions
 
+
+#Install snmp utilities
+RUN             echo "deb http://archive.ubuntu.com/ubuntu trusty multiverse\n" >> /etc/apt/sources.list && \
+                echo "deb-src http://archive.ubuntu.com/ubuntu trusty multiverse\n" >> /etc/apt/sources.list && \
+                apt-get update && \
+                apt-get -y install libsnmp-base snmp-mibs-downloader snmp
+
+
 # Install Sensu Plugins
-RUN 		apt-get install -y ruby ruby-dev build-essential && \
+RUN             apt-get -y  update && apt-get install -y ruby ruby-dev build-essential && \
 			gem install mail --no-ri --no-rdoc -v 2.5.4 && \
-			gem install sensu-plugin --no-ri --no-rdoc
+			gem install json --no-ri --no-rdoc -v 1.8.3 && \
+			gem install sensu-plugin --no-ri --no-rdoc -v 1.2.0
+
 
 VOLUME 		/etc/sensu/conf.d
 VOLUME 		/etc/sensu/handlers
