@@ -1,13 +1,17 @@
-FROM 		nuancemobility/ubuntu-base:14.04
-MAINTAINER 	Brice Argenson <brice.argenson@nuance.com>
+FROM 	    nuancemobility/ubuntu-base:16.10
+MAINTAINER  sspcm <mobility-sspcm@nuance.com>
 
 # Install Redis
 RUN 		apt-get install -y redis-server
 
+RUN             apt-get install -y wget apt-transport-https
 # Install Sensu
-RUN 		curl http://repos.sensuapp.org/apt/pubkey.gpg | apt-key add - && \
-			echo "deb     http://repos.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list && \
-			apt-get -y update && apt-get install -y sensu
+#RUN 		curl http://repos.sensuapp.org/apt/pubkey.gpg | apt-key add - && \
+#			echo "deb     http://repos.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list && \
+
+RUN                     wget -q https://sensu.global.ssl.fastly.net/apt/pubkey.gpg -O- | apt-key add - && \
+                        echo "deb     https://sensu.global.ssl.fastly.net/apt sensu main" > /etc/apt/sources.list.d/sensu.list && \
+			apt-get -y update && apt-get install -y --allow-unauthenticated sensu
 
 # Install and configure WizardVan
 RUN 		apt-get install -y git && \
